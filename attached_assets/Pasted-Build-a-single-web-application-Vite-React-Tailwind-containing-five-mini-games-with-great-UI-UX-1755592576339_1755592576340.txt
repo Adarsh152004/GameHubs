@@ -1,0 +1,168 @@
+Build a single web application (Vite + React + Tailwind) containing five mini-games with great UI/UX, solid functionality, and lightweight AI. Include a congratulations screen after winning each game. Provide an optional Python FastAPI backend for AI text generation (used by the Turing Test game), falling back gracefully to client-side if keys/backends aren’t configured.
+
+Tech Stack & Constraints
+
+Frontend: Vite + React 18 + TailwindCSS 3
+
+Language: TypeScript or JavaScript (your choice; be consistent)
+
+State: Local component state + localStorage for win history
+
+Styling: Tailwind utility classes (rounded-2xl, soft shadows, clean spacing)
+
+Icons/Emoji: Native emoji ok; no extra icon libs required
+
+AI Integration:
+
+Prefer OpenAI Chat Completions if VITE_OPENAI_API_KEY is set
+
+Else use backend /ai/generate (FastAPI) if VITE_BACKEND_URL set
+
+Else fall back to a local pseudo-generator
+
+Backend (optional): FastAPI endpoint /ai/generate using OpenAI if OPENAI_API_KEY else pseudo text
+
+Build/Run: npm run dev, npm run build, uvicorn main:app --reload
+
+Responsiveness: Mobile-first, scales to desktop (max-width ~ 1200px)
+
+High-Level App Structure
+
+Header/Nav: App title, completion counter, tabs for each game + Home
+
+Home Page: Grid of game cards with descriptions and “Play” buttons
+
+Game Pages: Full page with instructions, interactive area, score, round/status UI, controls, and a congratulations modal on win
+
+Global Congrats Modal: Reusable modal showing game name + score, “Continue” to return to Home
+
+Games & Rules
+Game 1 — Reverse Google
+
+Concept: Show a badly phrased description (“round fruit doctor hates”) → player types the keyword (“apple”).
+
+Rounds: 8 per session (shuffle a pool of prepared clues).
+
+Answer Checking: Case-insensitive; accept exact or substring matches (e.g., “smartphone” vs “phone” can be considered correct if you choose).
+
+Scoring: +1 for correct; show immediate feedback if wrong and reveal the answer; move to next.
+
+Win Condition: End of 8 rounds → show Congrats with total score.
+
+Game 2 — Turing Test Puzzle
+
+Concept: For a witty prompt, show 3 short answers: 2 human-written lines and 1 AI-generated line. Player must pick the AI line.
+
+Rounds: 6 rounds. Difficulty increases by prompting the AI to sound less “AI-ish” in later rounds (e.g., add constraints: avoid generic words, use mild slang, vary sentence rhythm).
+
+AI Text Source (priority order):
+
+Backend /ai/generate
+
+OpenAI API directly
+
+Local pseudo-generator (fallback)
+
+Scoring: +1 when AI is correctly identified; show feedback (“That was human” vs “You found the AI!”).
+
+Win Condition: After 6 rounds → Congrats with score.
+
+Game 3 — Gesture Memory (Emoji Simon)
+
+Concept: Start with a 1-emoji sequence. Each round, append a random emoji from a fixed set (e.g., ✌, 👋, 👍, 👌, 👎, 👏). Show sequence with highlight, then let player input.
+
+Phases: show (animate sequence) → input (player clicks emojis).
+
+Mistake: Ends the run immediately → Congrats with score attained.
+
+Win Condition: Survive to sequence length ≥ 8 (configurable) → Congrats.
+
+Game 4 — Reverse Drawing Challenge
+
+Concept: Draw a target shape (circle, square, triangle) while the cursor is inverted around the canvas center (move left → draw right).
+
+Implementation:
+
+Canvas in a bordered panel
+
+Inversion: Mirror coordinates relative to canvas center
+
+Show dashed target outline
+
+Record user path; on mouse up, evaluate similarity
+
+Evaluation (simple):
+
+Sample N points from the path
+
+Compute average distance to the ideal shape (circle radius distance error; square/triangle edge distance approximation)
+
+Accept if avg error < threshold (e.g. < 15px)
+
+Progression: Cycle shapes; require 3 successful traces to win
+
+Win Condition: On 3 successes → Congrats
+
+Game 5 — Black Box Challenge
+
+Concept: Hidden numeric rule (e.g., sum of digits, sum of squares of digits, product of digits, reverse(n)×sumDigits(n), alternating sum). Provide 3 example I/O pairs; allow player to test custom inputs; present multiple-choice radio options for the rule.
+
+Scoring: Correct guess = win; otherwise allow more custom tests and guesses.
+
+Win Condition: Correctly select the rule → Congrats (score can be fixed, e.g. 3)
+
+UI/UX Requirements
+
+Theme: Light, airy, rounded-2xl, soft shadows (shadow-soft), border-slate-200, text slate-700/800
+
+Buttons: Primary = bg-sky-500 hover:bg-sky-600 text-white rounded-xl; Secondary = subtle borders
+
+Layout: Container width max-w-6xl, mx-auto, px-4
+
+Accessibility:
+
+Button text labels
+
+Sufficient color contrast
+
+Focus ring on inputs (focus:ring-sky-400)
+
+Larger touch targets on mobile
+
+Feedback: Clear, immediate feedback messages (+/−), progress indicators (Round x/y, Score)
+
+Persistence
+
+Save wins per game in localStorage as JSON (e.g., { [gameKey]: { score, dateISO } }).
+
+Show completed count in the header.
+
+AI/Backend Details
+
+Frontend .env options:
+
+VITE_OPENAI_API_KEY (optional)
+
+VITE_OPENAI_MODEL (default gpt-3.5-turbo)
+
+VITE_BACKEND_URL (optional; e.g., http://127.0.0.1:8000)
+
+Frontend AI helper logic:
+
+smartGenerate(prompt):
+
+Try backend /ai/generate
+
+Try OpenAI Chat Completions
+
+Fallback to local pseudo generator (template-based)
+
+Backend (FastAPI):
+
+POST /ai/generate with JSON body { "prompt": string }
+
+If OPENAI_API_KEY set in env, call OpenAI Chat Completions using OPENAI_MODEL (default gpt-3.5-turbo)
+
+Else return a local pseudo response (compose sentence from prompt)
+
+Enable wide CORS (*)
