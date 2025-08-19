@@ -30,7 +30,38 @@ def games():
     difficulty = session.get('difficulty', 'medium')
     return render_template('games.html', difficulty=difficulty)
 
-# Original Games
+# Original 5 Games (Cosmic-themed versions)
+@app.route('/reverse-google')
+def reverse_google():
+    """Original Reverse Google game with cosmic theme"""
+    difficulty = session.get('difficulty', 'medium')
+    return render_template('reverse_google.html', difficulty=difficulty)
+
+@app.route('/turing-test')
+def turing_test():
+    """Original Turing Test game with cosmic theme"""
+    difficulty = session.get('difficulty', 'medium')
+    return render_template('turing_test.html', difficulty=difficulty)
+
+@app.route('/gesture-memory')
+def gesture_memory():
+    """Original Gesture Memory game with cosmic theme"""
+    difficulty = session.get('difficulty', 'medium')
+    return render_template('gesture_memory.html', difficulty=difficulty)
+
+@app.route('/reverse-drawing')
+def reverse_drawing():
+    """Original Reverse Drawing game with cosmic theme"""
+    difficulty = session.get('difficulty', 'medium')
+    return render_template('reverse_drawing.html', difficulty=difficulty)
+
+@app.route('/black-box')
+def black_box():
+    """Original Black Box game with cosmic theme"""
+    difficulty = session.get('difficulty', 'medium')
+    return render_template('black_box.html', difficulty=difficulty)
+
+# Upgraded Cosmic Games
 @app.route('/quantum-decrypt')
 def quantum_decrypt():
     """Quantum word decryption game (upgraded reverse-google)"""
