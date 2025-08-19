@@ -1,219 +1,103 @@
 {% extends "base.html" %}
 
-{% block title %}∎ REVERSE GOOGLE - {{ difficulty.upper() }} MODE ∎{% endblock %}
+{% block title %}Reverse Google - Mini Games{% endblock %}
 
 {% block content %}
-<div style="text-align: center; margin-bottom: 40px;">
-    <h1 class="matrix-text">∎ REVERSE GOOGLE PROTOCOL ∎</h1>
-    <p style="color: var(--star-white); font-size: 1.1rem;">
-        Decode cryptic word puzzles transmitted from the cosmic void...
-    </p>
-</div>
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="text-center mb-4">
+            <h1 class="display-5 fw-bold text-primary">🔍 Reverse Google</h1>
+            <p class="lead">Guess the word from the cryptic clue!</p>
+        </div>
 
-<div class="status-display">
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-        <div class="level-display">ROUND: <span id="current-round">1</span> / <span id="total-rounds">5</span></div>
-        <div class="score-display">SCORE: <span id="current-score">0</span></div>
-        <div style="color: var(--magic-pink);">DIFFICULTY: {{ difficulty.upper() }}</div>
-    </div>
-</div>
+        <!-- Game Status -->
+        <div class="row mb-4">
+            <div class="col-4">
+                <div class="card text-center">
+                    <div class="card-body py-2">
+                        <small class="text-muted">Round</small>
+                        <div class="fw-bold" id="round-counter">1 / 8</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card text-center">
+                    <div class="card-body py-2">
+                        <small class="text-muted">Score</small>
+                        <div class="fw-bold text-success" id="score-counter">0</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card text-center">
+                    <div class="card-body py-2">
+                        <small class="text-muted">Time</small>
+                        <div class="fw-bold" id="timer">--</div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<div style="background: linear-gradient(135deg, var(--space-dark), var(--universe-purple)); border: 2px solid var(--terminal-green); border-radius: 12px; padding: 25px; margin: 20px 0; text-align: center;">
-    <h3 style="color: var(--quantum-glow); margin-bottom: 20px;">∎ ENCRYPTED CLUE RECEIVED ∎</h3>
-    <div id="clue-display" style="color: var(--star-white); font-size: 1.3rem; margin-bottom: 20px; font-family: 'Courier New';">
-        Loading cosmic transmission...
-    </div>
-    
-    <input type="text" 
-           id="answer-input" 
-           class="cosmic-input" 
-           placeholder="ENTER_DECODE_KEY..."
-           style="margin: 20px 0;"
-           autocomplete="off">
-    
-    <div style="margin: 20px 0;">
-        <button id="submit-btn" class="cosmic-btn">
-            <i class="fas fa-unlock"></i> DECRYPT_MESSAGE
-        </button>
-        
-        <button id="hint-btn" class="cosmic-btn" style="background: linear-gradient(45deg, var(--magic-cyan), var(--nebula-blue));">
-            <i class="fas fa-lightbulb"></i> REQUEST_HINT
-        </button>
-    </div>
-    
-    <div id="hint-display" style="display: none; background: rgba(0, 0, 0, 0.8); border: 1px dashed var(--magic-cyan); border-radius: 8px; padding: 15px; margin: 20px 0; color: var(--magic-cyan);">
-        <p id="hint-text"></p>
-    </div>
-</div>
+        <!-- Game Area -->
+        <div class="card game-area mb-4">
+            <div class="card-body">
+                <!-- Instructions -->
+                <div id="instructions" class="text-center mb-4">
+                    <h4>How to Play</h4>
+                    <p>You'll see a cryptic description of a common word or phrase. Your job is to guess what it means!</p>
+                    <p class="text-muted">Example: "round fruit doctor hates" = apple</p>
+                    <button class="btn btn-primary" onclick="startGame()">Start Game</button>
+                </div>
 
-<div style="text-align: center; margin: 30px 0;">
-    <button id="skip-btn" class="cosmic-btn" style="background: linear-gradient(45deg, var(--magic-pink), var(--magic-violet));">
-        <i class="fas fa-forward"></i> SKIP_ROUND
-    </button>
-    
-    <a href="/games" class="cosmic-btn" style="background: linear-gradient(45deg, var(--void-gray), var(--space-dark));">
-        <i class="fas fa-arrow-left"></i> RETURN_TO_BASE
-    </a>
-</div>
+                <!-- Game Play Area -->
+                <div id="game-play" class="d-none">
+                    <div class="text-center mb-4">
+                        <h3 id="clue-text" class="text-primary mb-3"></h3>
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div class="input-group input-group-lg">
+                                    <input type="text" id="answer-input" class="form-control" placeholder="Type your answer..." autocomplete="off">
+                                    <button class="btn btn-primary" type="button" onclick="submitAnswer()">
+                                        <i class="fas fa-check"></i> Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-<div style="text-align: center; color: var(--terminal-green); font-family: 'Courier New'; margin-top: 40px;">
-    <p>$ reverse_google_active: true</p>
-    <p>$ decryption_protocol: standby</p>
-    <p>$ difficulty_mode: {{ difficulty }}</p>
+                    <!-- Feedback Area -->
+                    <div id="feedback-area" class="text-center mb-3 d-none">
+                        <div id="feedback-message" class="alert" role="alert"></div>
+                        <button id="next-button" class="btn btn-secondary" onclick="nextRound()">
+                            Next Round <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Game Complete -->
+                <div id="game-complete" class="text-center d-none">
+                    <h3 class="text-success mb-3">🎉 Game Complete!</h3>
+                    <p class="lead">Final Score: <span id="final-score" class="fw-bold"></span> / 8</p>
+                    <div class="d-flex gap-2 justify-content-center">
+                        <button class="btn btn-primary" onclick="startGame()">
+                            <i class="fas fa-redo"></i> Play Again
+                        </button>
+                        <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-home"></i> Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Progress -->
+        <div class="progress mb-3" style="height: 8px;">
+            <div id="progress-bar" class="progress-bar bg-primary" role="progressbar" style="width: 0%"></div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
-<script>
-class ReverseGoogleGame {
-    constructor() {
-        this.difficulty = '{{ difficulty }}';
-        this.currentRound = 1;
-        this.score = 0;
-        this.hintsUsed = 0;
-        
-        const diffSettings = this.getDifficultySettings();
-        this.totalRounds = diffSettings.rounds;
-        
-        this.words = {
-            easy: [
-                { word: "APPLE", clue: "Red fruit that keeps the doctor away", hint: "Think healthy eating" },
-                { word: "BOOK", clue: "Paper knowledge holder with many pages", hint: "You read this" },
-                { word: "CAR", clue: "Four-wheeled transport machine", hint: "Motor vehicle" },
-                { word: "DOG", clue: "Man's best friend that barks", hint: "Popular pet" },
-                { word: "HOUSE", clue: "Building where families live", hint: "Your home" }
-            ],
-            medium: [
-                { word: "RAINBOW", clue: "Colorful arc after rain and sun meet", hint: "Seven colors in the sky" },
-                { word: "PIANO", clue: "Musical instrument with black and white keys", hint: "You play it with fingers" },
-                { word: "BUTTERFLY", clue: "Colorful insect that was once a caterpillar", hint: "It flies and transforms" },
-                { word: "TELESCOPE", clue: "Device that makes distant objects appear closer", hint: "Astronomers use this" },
-                { word: "VOLCANO", clue: "Mountain that can explode with hot lava", hint: "It erupts" }
-            ],
-            hard: [
-                { word: "DEMOCRACY", clue: "Government system where people choose their leaders", hint: "Political system with voting" },
-                { word: "METAMORPHOSIS", clue: "Complete transformation from one form to another", hint: "Caterpillar to butterfly process" },
-                { word: "ARCHAEOLOGY", clue: "Study of human history through excavation", hint: "Digging up ancient artifacts" },
-                { word: "PHOTOSYNTHESIS", clue: "Process plants use to make food from sunlight", hint: "How plants eat light" },
-                { word: "CONSTELLATION", clue: "Group of stars forming recognizable pattern", hint: "Star patterns in the sky" }
-            ]
-        };
-        
-        this.currentWord = null;
-        this.init();
-    }
-    
-    getDifficultySettings() {
-        const settings = {
-            easy: { rounds: 3 },
-            medium: { rounds: 5 },
-            hard: { rounds: 7 }
-        };
-        return settings[this.difficulty] || settings.medium;
-    }
-    
-    init() {
-        document.getElementById('total-rounds').textContent = this.totalRounds;
-        this.setupEventListeners();
-        this.nextRound();
-    }
-    
-    setupEventListeners() {
-        document.getElementById('submit-btn').addEventListener('click', () => this.checkAnswer());
-        document.getElementById('hint-btn').addEventListener('click', () => this.showHint());
-        document.getElementById('skip-btn').addEventListener('click', () => this.skipRound());
-        document.getElementById('answer-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.checkAnswer();
-        });
-    }
-    
-    nextRound() {
-        if (this.currentRound > this.totalRounds) {
-            this.endGame();
-            return;
-        }
-        
-        const wordPool = this.words[this.difficulty];
-        this.currentWord = wordPool[Math.floor(Math.random() * wordPool.length)];
-        
-        document.getElementById('current-round').textContent = this.currentRound;
-        document.getElementById('clue-display').textContent = this.currentWord.clue;
-        document.getElementById('answer-input').value = '';
-        document.getElementById('hint-display').style.display = 'none';
-        document.getElementById('answer-input').focus();
-        
-        this.hintsUsed = 0;
-    }
-    
-    checkAnswer() {
-        const userAnswer = document.getElementById('answer-input').value.trim().toUpperCase();
-        
-        if (!userAnswer) {
-            this.showFeedback("Please enter your answer!", 'warning');
-            return;
-        }
-        
-        if (userAnswer === this.currentWord.word) {
-            const roundScore = Math.floor((100 - (this.hintsUsed * 20)) * (this.difficulty === 'hard' ? 2 : this.difficulty === 'medium' ? 1.5 : 1));
-            this.score += Math.max(10, roundScore);
-            document.getElementById('current-score').textContent = this.score;
-            
-            this.showFeedback("✨ TRANSMISSION DECODED! ✨", 'success');
-            
-            setTimeout(() => {
-                this.currentRound++;
-                this.nextRound();
-            }, 2000);
-            
-        } else {
-            this.showFeedback("❌ DECRYPTION FAILED - Try again!", 'error');
-        }
-    }
-    
-    showHint() {
-        if (this.hintsUsed >= 1) {
-            this.showFeedback("No more hints available!", 'warning');
-            return;
-        }
-        
-        this.hintsUsed++;
-        document.getElementById('hint-text').textContent = this.currentWord.hint;
-        document.getElementById('hint-display').style.display = 'block';
-    }
-    
-    skipRound() {
-        if (confirm('Skip this cosmic transmission?')) {
-            this.showFeedback(`The answer was: ${this.currentWord.word}`, 'info');
-            setTimeout(() => {
-                this.currentRound++;
-                this.nextRound();
-            }, 2000);
-        }
-    }
-    
-    showFeedback(message, type) {
-        const feedback = document.createElement('div');
-        feedback.textContent = message;
-        feedback.style.cssText = `
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: ${type === 'success' ? 'var(--terminal-green)' : type === 'error' ? 'var(--magic-pink)' : 'var(--magic-cyan)'};
-            color: var(--cosmic-black); padding: 15px 30px; border-radius: 10px;
-            font-weight: bold; z-index: 2000;
-            box-shadow: 0 0 30px ${type === 'success' ? 'var(--terminal-green)' : type === 'error' ? 'var(--magic-pink)' : 'var(--magic-cyan)'};
-        `;
-        
-        document.body.appendChild(feedback);
-        setTimeout(() => document.body.removeChild(feedback), 2000);
-    }
-    
-    endGame() {
-        showCosmicSuccess('Reverse Google', this.score, 
-            `You decoded ${this.currentRound - 1} cosmic transmissions! Mission complete!`);
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    new ReverseGoogleGame();
-});
-</script>
+<script src="{{ url_for('static', filename='js/reverse_google.js') }}"></script>
 {% endblock %}

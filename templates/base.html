@@ -3,121 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}∎ COSMIC GAMES TERMINAL ∎{% endblock %}</title>
+    <title>{% block title %}Mini Games Collection{% endblock %}</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Cosmic Theme CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/cosmic-theme.css') }}">
-    {% block extra_css %}{% endblock %}
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    {% block extra_head %}{% endblock %}
 </head>
 <body>
-    <div class="cosmic-container">
-        <div class="terminal-header">
-            <div class="terminal-dots">
-                <div class="terminal-dot dot-red"></div>
-                <div class="terminal-dot dot-yellow"></div>
-                <div class="terminal-dot dot-green"></div>
-            </div>
-            <div class="terminal-title">
-                <i class="fas fa-terminal"></i> COSMIC_GAMES_TERMINAL v2.1.0
+    <!-- Header Navigation -->
+    <header class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary" href="{{ url_for('home') }}">
+                🎮 Mini Games
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('reverse_google') }}">Reverse Google</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('turing_test') }}">Turing Test</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('gesture_memory') }}">Gesture Memory</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('reverse_drawing') }}">Reverse Drawing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('black_box') }}">Black Box</a>
+                    </li>
+                </ul>
+                
+                <div class="navbar-text">
+                    <span class="badge bg-primary" id="completion-counter">
+                        <i class="fas fa-trophy"></i> <span id="wins-count">0</span> wins
+                    </span>
+                </div>
             </div>
         </div>
-        
-        <main>
-            {% block content %}{% endblock %}
-        </main>
-        
-        <!-- Cosmic Success Modal -->
-        <div id="cosmicSuccessModal" style="display: none;">
-            <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 1000; display: flex; align-items: center; justify-content: center;">
-                <div class="cosmic-success" style="max-width: 500px; margin: 20px;">
-                    <h2 class="matrix-text">🌟 QUANTUM VICTORY ACHIEVED! 🌟</h2>
-                    <div class="cosmic-loader"></div>
-                    <p id="cosmic-score">SCORE: <span class="matrix-text">0</span></p>
-                    <p id="cosmic-message">You have mastered the cosmic challenge!</p>
-                    <button class="cosmic-btn" onclick="closeCosmicModal()">
-                        <i class="fas fa-rocket"></i> CONTINUE_MISSION
+    </header>
+
+    <!-- Main Content -->
+    <main class="container my-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Congratulations Modal -->
+    <div class="modal fade" id="congratsModal" tabindex="-1" aria-labelledby="congratsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="congratsModalLabel">
+                        🎉 Congratulations!
+                    </h5>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-trophy text-warning" style="font-size: 3rem;"></i>
+                    </div>
+                    <h4 id="congrats-game-name">Game Complete!</h4>
+                    <p class="lead" id="congrats-score">Your Score: 0</p>
+                    <p class="text-muted" id="congrats-message">Well done!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="returnToHome()">
+                        Continue to Home
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Core JavaScript -->
-    <script>
-        // Global cosmic variables
-        let currentDifficulty = 'medium';
-        let cosmicScore = 0;
-        let totalWins = parseInt(localStorage.getItem('cosmicWins')) || 0;
-        
-        // Update win counter display
-        function updateWinCounter() {
-            const winDisplay = document.getElementById('wins-count');
-            if (winDisplay) {
-                winDisplay.textContent = totalWins;
-            }
-        }
-        
-        // Show cosmic success modal
-        function showCosmicSuccess(gameName, score, message) {
-            document.getElementById('cosmic-score').innerHTML = `SCORE: <span class="matrix-text">${score}</span>`;
-            document.getElementById('cosmic-message').textContent = message || 'You have mastered the cosmic challenge!';
-            document.getElementById('cosmicSuccessModal').style.display = 'block';
-            
-            // Increment wins and save
-            totalWins++;
-            localStorage.setItem('cosmicWins', totalWins);
-            updateWinCounter();
-        }
-        
-        // Close cosmic modal
-        function closeCosmicModal() {
-            document.getElementById('cosmicSuccessModal').style.display = 'none';
-            // Return to games selection
-            window.location.href = '/games';
-        }
-        
-        // Set difficulty level
-        function setDifficulty(level) {
-            currentDifficulty = level;
-            localStorage.setItem('cosmicDifficulty', level);
-        }
-        
-        // Get current difficulty
-        function getCurrentDifficulty() {
-            return localStorage.getItem('cosmicDifficulty') || 'medium';
-        }
-        
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            currentDifficulty = getCurrentDifficulty();
-            updateWinCounter();
-        });
-        
-        // Utility functions for games
-        function getRandomElement(array) {
-            return array[Math.floor(Math.random() * array.length)];
-        }
-        
-        function shuffle(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-        
-        // Difficulty multipliers
-        function getDifficultySettings() {
-            const settings = {
-                easy: { multiplier: 1, timeBonus: 1.5, rounds: 3 },
-                medium: { multiplier: 1.5, timeBonus: 1, rounds: 5 },
-                hard: { multiplier: 2, timeBonus: 0.7, rounds: 7 }
-            };
-            return settings[currentDifficulty] || settings.medium;
-        }
-    </script>
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Main JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
     {% block scripts %}{% endblock %}
 </body>
 </html>
