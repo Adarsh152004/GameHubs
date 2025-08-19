@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Reverse Drawing - Mini Games{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="text-center mb-4">
+            <h1 class="display-5 fw-bold text-primary">✏️ Reverse Drawing</h1>
+            <p class="lead">Draw shapes with inverted cursor controls!</p>
+        </div>
+
+        <!-- Game Status -->
+        <div class="row mb-4">
+            <div class="col-3">
+                <div class="card text-center">
+                    <div class="card-body py-2">
+                        <small class="text-muted">Shape</small>
+                        <div class="fw-bold" id="current-shape">Circle</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card text-center">
+                    <div class="card-body py-2">
+                        <small class="text-muted">Completed</small>
+                        <div class="fw-bold text-success" id="completed-count">0 / 3</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card text-center">
+                    <div class="card-body py-2">
+                        <small class="text-muted">Accuracy</small>
+                        <div class="fw-bold" id="accuracy-display">--</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card text-center">
+                    <div class="card-body py-2">
+                        <small class="text-muted">Attempts</small>
+                        <div class="fw-bold" id="attempts-count">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Area -->
+        <div class="card game-area mb-4">
+            <div class="card-body">
+                <!-- Instructions -->
+                <div id="instructions" class="text-center mb-4">
+                    <h4>How to Play</h4>
+                    <p>Draw the target shape on the canvas below, but be careful - your cursor is inverted!</p>
+                    <p>Moving your mouse left will draw right, and moving up will draw down.</p>
+                    <p class="text-muted">Complete 3 different shapes to win the game.</p>
+                    <button class="btn btn-primary" onclick="startGame()">Start Game</button>
+                </div>
+
+                <!-- Game Play Area -->
+                <div id="game-play" class="d-none">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <!-- Canvas Area -->
+                            <div class="canvas-container mb-3">
+                                <canvas id="drawing-canvas" width="600" height="400" class="border rounded"></canvas>
+                            </div>
+                            
+                            <!-- Controls -->
+                            <div class="text-center">
+                                <button class="btn btn-warning me-2" onclick="clearCanvas()">
+                                    <i class="fas fa-eraser"></i> Clear
+                                </button>
+                                <button class="btn btn-success me-2" onclick="checkDrawing()">
+                                    <i class="fas fa-check"></i> Check Drawing
+                                </button>
+                                <button class="btn btn-info" onclick="showHint()">
+                                    <i class="fas fa-lightbulb"></i> Hint
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4">
+                            <!-- Target Shape -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Target Shape</h6>
+                                </div>
+                                <div class="card-body text-center">
+                                    <canvas id="target-canvas" width="200" height="200" class="border rounded mb-3"></canvas>
+                                    <p class="small text-muted" id="shape-description">
+                                        Draw this shape on the main canvas
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <!-- Tips -->
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h6 class="mb-0">💡 Tips</h6>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="small mb-0">
+                                        <li>Move slowly and deliberately</li>
+                                        <li>Think opposite to your instincts</li>
+                                        <li>Use the hint if you're stuck</li>
+                                        <li>You can retry as many times as needed</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Feedback Area -->
+                    <div id="feedback-area" class="text-center mt-4 d-none">
+                        <div id="feedback-message" class="alert" role="alert"></div>
+                        <button id="next-button" class="btn btn-secondary" onclick="nextShape()">
+                            Next Shape <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Game Complete -->
+                <div id="game-complete" class="text-center d-none">
+                    <h3 class="text-success mb-3">🎉 Game Complete!</h3>
+                    <p class="lead">You successfully drew all 3 shapes!</p>
+                    <p>Total Attempts: <span id="total-attempts" class="fw-bold"></span></p>
+                    <div class="d-flex gap-2 justify-content-center">
+                        <button class="btn btn-primary" onclick="startGame()">
+                            <i class="fas fa-redo"></i> Play Again
+                        </button>
+                        <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-home"></i> Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Progress -->
+        <div class="progress mb-3" style="height: 8px;">
+            <div id="progress-bar" class="progress-bar bg-primary" role="progressbar" style="width: 0%"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/reverse_drawing.js') }}"></script>
+{% endblock %}

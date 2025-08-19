@@ -1,0 +1,345 @@
+/* Custom CSS for Mini Games Collection */
+
+:root {
+    --primary-color: #0ea5e9;
+    --primary-hover: #0284c7;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    --light-bg: #f8fafc;
+    --border-color: #e2e8f0;
+    --text-muted: #64748b;
+    --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Global Styles */
+body {
+    background-color: var(--light-bg);
+    color: #374151;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header */
+.navbar {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+}
+
+/* Cards */
+.card {
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.game-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.game-area {
+    min-height: 400px;
+}
+
+/* Game Icons */
+.game-icon {
+    font-size: 3rem;
+    display: inline-block;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 0.75rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+}
+
+.btn-outline-secondary {
+    border-color: var(--border-color);
+    color: var(--text-muted);
+}
+
+/* Focus States */
+.form-control:focus,
+.btn:focus {
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+    border-color: var(--primary-color);
+}
+
+/* Progress Bar */
+.progress {
+    border-radius: 0.5rem;
+    background-color: #e2e8f0;
+}
+
+.progress-bar {
+    border-radius: 0.5rem;
+    transition: width 0.3s ease;
+}
+
+/* Game Specific Styles */
+
+/* Reverse Google */
+.clue-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    padding: 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Turing Test */
+.response-option {
+    border: 2px solid var(--border-color);
+    border-radius: 1rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: white;
+}
+
+.response-option:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-soft);
+}
+
+.response-option.selected {
+    border-color: var(--primary-color);
+    background-color: rgba(14, 165, 233, 0.05);
+}
+
+.response-option.correct {
+    border-color: var(--success-color);
+    background-color: rgba(16, 185, 129, 0.1);
+}
+
+.response-option.incorrect {
+    border-color: var(--danger-color);
+    background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* Gesture Memory */
+.sequence-display {
+    min-height: 100px;
+    padding: 2rem;
+    background: white;
+    border: 2px dashed var(--border-color);
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.gesture-buttons {
+    padding: 1rem;
+}
+
+.gesture-btn {
+    font-size: 2rem;
+    width: 80px;
+    height: 80px;
+    border-radius: 1rem;
+    border: 2px solid var(--border-color);
+    transition: all 0.2s ease;
+}
+
+.gesture-btn:hover {
+    border-color: var(--primary-color);
+    transform: scale(1.05);
+}
+
+.gesture-btn.active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.sequence-emoji {
+    font-size: 3rem;
+    margin: 0 0.5rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background: white;
+    border: 2px solid var(--border-color);
+    animation: pulse 0.5s ease-in-out;
+}
+
+.sequence-emoji.highlight {
+    border-color: var(--primary-color);
+    background-color: rgba(14, 165, 233, 0.1);
+    transform: scale(1.1);
+}
+
+.player-sequence {
+    min-height: 60px;
+    padding: 1rem;
+    background: white;
+    border: 2px dashed var(--border-color);
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+/* Reverse Drawing */
+.canvas-container {
+    position: relative;
+    text-align: center;
+}
+
+#drawing-canvas {
+    border: 3px solid var(--border-color);
+    border-radius: 1rem;
+    cursor: crosshair;
+    background: white;
+    max-width: 100%;
+    height: auto;
+}
+
+#target-canvas {
+    border: 2px solid var(--border-color);
+    border-radius: 0.5rem;
+    background: white;
+}
+
+/* Black Box */
+.examples-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1rem;
+}
+
+.example-item {
+    text-align: center;
+    padding: 1rem;
+    background: white;
+    border: 2px solid var(--border-color);
+    border-radius: 1rem;
+}
+
+.rule-option {
+    border: 2px solid var(--border-color);
+    border-radius: 1rem;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: white;
+}
+
+.rule-option:hover {
+    border-color: var(--primary-color);
+}
+
+.rule-option.selected {
+    border-color: var(--primary-color);
+    background-color: rgba(14, 165, 233, 0.05);
+}
+
+/* Animations */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    .game-icon {
+        font-size: 2rem;
+    }
+    
+    .gesture-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+        margin: 0.25rem;
+    }
+    
+    .sequence-emoji {
+        font-size: 2rem;
+        margin: 0 0.25rem;
+    }
+    
+    #drawing-canvas {
+        max-width: 100%;
+        width: 100%;
+        height: 300px;
+    }
+    
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    .btn {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Accessibility */
+.btn:focus,
+.form-control:focus,
+.gesture-btn:focus,
+.response-option:focus,
+.rule-option:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .card {
+        border-width: 2px;
+    }
+    
+    .btn {
+        border-width: 2px;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
