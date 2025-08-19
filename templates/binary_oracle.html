@@ -1,0 +1,486 @@
+{% extends "base.html" %}
+
+{% block title %}∎ BINARY ORACLE - {{ difficulty.upper() }} MODE ∎{% endblock %}
+
+{% block extra_css %}
+<style>
+.transmission-screen {
+    background: linear-gradient(135deg, var(--cosmic-black), var(--space-dark));
+    border: 3px solid var(--terminal-green);
+    border-radius: 15px;
+    padding: 25px;
+    margin: 25px 0;
+    font-family: 'Courier New', monospace;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+}
+
+.transmission-screen::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 2px,
+        rgba(0, 255, 65, 0.05) 2px,
+        rgba(0, 255, 65, 0.05) 4px
+    );
+    animation: scanlines 2s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes scanlines {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(4px); }
+}
+
+.binary-display {
+    color: var(--terminal-green);
+    font-size: 1.4rem;
+    line-height: 1.8;
+    text-shadow: 0 0 8px var(--terminal-green);
+    text-align: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    margin: 15px 0;
+    letter-spacing: 2px;
+    word-break: break-all;
+    animation: binary-flicker 1.5s infinite alternate;
+}
+
+@keyframes binary-flicker {
+    0% { opacity: 0.9; }
+    100% { opacity: 1; }
+}
+
+.alien-message {
+    background: linear-gradient(135deg, var(--magic-violet), var(--magic-pink));
+    border: 2px solid var(--quantum-glow);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+    color: var(--star-white);
+    box-shadow: 0 0 25px rgba(114, 9, 183, 0.4);
+}
+
+.translation-area {
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid var(--magic-cyan);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.translation-input {
+    background: transparent;
+    border: 2px solid var(--magic-cyan);
+    border-radius: 8px;
+    color: var(--magic-cyan);
+    padding: 12px;
+    font-family: 'Courier New', monospace;
+    font-size: 1.1rem;
+    width: 100%;
+    text-align: center;
+    text-transform: uppercase;
+    resize: vertical;
+    min-height: 100px;
+    transition: all 0.3s ease;
+}
+
+.translation-input:focus {
+    outline: none;
+    border-color: var(--quantum-glow);
+    box-shadow: 0 0 20px var(--quantum-glow);
+    color: var(--quantum-glow);
+    text-shadow: 0 0 8px var(--quantum-glow);
+}
+
+.binary-converter {
+    background: var(--space-dark);
+    border: 1px solid var(--nebula-blue);
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+    color: var(--nebula-blue);
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.converter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+    margin: 10px 0;
+    font-size: 0.8rem;
+}
+
+.bit-helper {
+    background: rgba(67, 97, 238, 0.2);
+    border: 1px solid var(--nebula-blue);
+    border-radius: 5px;
+    padding: 8px;
+    text-align: center;
+}
+
+.signal-strength {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    margin: 15px 0;
+}
+
+.signal-bar {
+    width: 8px;
+    background: var(--terminal-green);
+    border-radius: 2px;
+    animation: signal-pulse 1.5s infinite ease-in-out;
+}
+
+.signal-bar:nth-child(1) { height: 10px; animation-delay: 0s; }
+.signal-bar:nth-child(2) { height: 20px; animation-delay: 0.2s; }
+.signal-bar:nth-child(3) { height: 30px; animation-delay: 0.4s; }
+.signal-bar:nth-child(4) { height: 20px; animation-delay: 0.6s; }
+.signal-bar:nth-child(5) { height: 10px; animation-delay: 0.8s; }
+
+@keyframes signal-pulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="text-align: center; margin-bottom: 40px;">
+    <h1 class="matrix-text">∎ BINARY ORACLE STATION ∎</h1>
+    <p style="color: var(--star-white); font-size: 1.1rem;">
+        Decode alien binary transmissions from the cosmic void...
+    </p>
+</div>
+
+<div class="status-display">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+        <div class="level-display">SIGNAL: <span id="current-signal">1</span> / <span id="total-signals">5</span></div>
+        <div class="score-display">TRANSLATIONS: <span id="current-score">0</span></div>
+        <div style="color: var(--magic-pink);">DIFFICULTY: {{ difficulty.upper() }}</div>
+    </div>
+</div>
+
+<div class="signal-strength">
+    <span style="color: var(--terminal-green); margin-right: 10px;">SIGNAL STRENGTH:</span>
+    <div class="signal-bar"></div>
+    <div class="signal-bar"></div>
+    <div class="signal-bar"></div>
+    <div class="signal-bar"></div>
+    <div class="signal-bar"></div>
+</div>
+
+<div class="transmission-screen">
+    <h3 style="color: var(--terminal-green); text-align: center; margin-bottom: 20px;">
+        ∎ INCOMING ALIEN TRANSMISSION ∎
+    </h3>
+    
+    <div class="binary-display" id="binary-message">
+        11010000 11001100 11000001 10110001...
+    </div>
+    
+    <div style="text-align: center; color: var(--magic-cyan); font-size: 0.9rem; margin-top: 10px;">
+        <span id="transmission-info">Analyzing signal pattern...</span>
+    </div>
+</div>
+
+<div class="binary-converter">
+    <h4 style="color: var(--nebula-blue); margin-bottom: 15px;">📡 BINARY DECODER REFERENCE</h4>
+    <div class="converter-grid" id="decoder-grid">
+        <!-- Decoder reference will be populated here -->
+    </div>
+</div>
+
+<div class="translation-area">
+    <h3 style="color: var(--magic-cyan); text-align: center; margin-bottom: 15px;">
+        ∎ TRANSLATION MATRIX ∎
+    </h3>
+    
+    <textarea id="translation-input" 
+              class="translation-input" 
+              placeholder="ENTER YOUR TRANSLATION HERE..."
+              autocomplete="off"></textarea>
+    
+    <div style="text-align: center; margin-top: 20px;">
+        <button id="decode-btn" class="cosmic-btn">
+            <i class="fas fa-satellite"></i> DECODE_TRANSMISSION
+        </button>
+        
+        <button id="hint-btn" class="cosmic-btn" style="background: linear-gradient(45deg, var(--magic-cyan), var(--nebula-blue));">
+            <i class="fas fa-satellite-dish"></i> SIGNAL_BOOST
+        </button>
+    </div>
+</div>
+
+<div class="alien-message" id="result-display" style="display: none;">
+    <h4 style="color: var(--quantum-glow);">∎ DECODED MESSAGE ∎</h4>
+    <p id="decoded-text"></p>
+</div>
+
+<div style="text-align: center; margin: 30px 0;">
+    <button id="skip-btn" class="cosmic-btn" style="background: linear-gradient(45deg, var(--magic-pink), var(--magic-violet));">
+        <i class="fas fa-forward"></i> SKIP_SIGNAL
+    </button>
+    
+    <a href="/games" class="cosmic-btn" style="background: linear-gradient(45deg, var(--void-gray), var(--space-dark));">
+        <i class="fas fa-power-off"></i> DISCONNECT
+    </a>
+</div>
+
+<div style="text-align: center; color: var(--terminal-green); font-family: 'Courier New'; margin-top: 40px; line-height: 1.4;">
+    <p>$ binary_oracle_active: true</p>
+    <p>$ alien_frequency: scanning...</p>
+    <p>$ translation_protocol: standby</p>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+class BinaryOracleGame {
+    constructor() {
+        this.difficulty = '{{ difficulty }}';
+        this.currentSignal = 1;
+        this.score = 0;
+        this.hintsUsed = 0;
+        
+        // Get difficulty settings
+        const diffSettings = this.getDifficultySettings();
+        this.totalSignals = diffSettings.rounds;
+        this.messageLength = diffSettings.messageLength;
+        
+        // Alien messages based on difficulty
+        this.alienMessages = {
+            easy: [
+                { english: "HELLO EARTH", binary: "01001000 01000101 01001100 01001100 01001111 00100000 01000101 01000001 01010010 01010100 01001000" },
+                { english: "WE COME IN PEACE", binary: "01010111 01000101 00100000 01000011 01001111 01001101 01000101 00100000 01001001 01001110 00100000 01010000 01000101 01000001 01000011 01000101" },
+                { english: "GREETINGS HUMANS", binary: "01000111 01010010 01000101 01000101 01010100 01001001 01001110 01000111 01010011 00100000 01001000 01010101 01001101 01000001 01001110 01010011" },
+                { english: "FRIEND", binary: "01000110 01010010 01001001 01000101 01001110 01000100" },
+                { english: "HELP US", binary: "01001000 01000101 01001100 01010000 00100000 01010101 01010011" }
+            ],
+            medium: [
+                { english: "COORDINATES RECEIVED", binary: "01000011 01001111 01001111 01010010 01000100 01001001 01001110 01000001 01010100 01000101 01010011 00100000 01010010 01000101 01000011 01000101 01001001 01010110 01000101 01000100" },
+                { english: "PORTAL OPENING SOON", binary: "01010000 01001111 01010010 01010100 01000001 01001100 00100000 01001111 01010000 01000101 01001110 01001001 01001110 01000111 00100000 01010011 01001111 01001111 01001110" },
+                { english: "PREPARE FOR CONTACT", binary: "01010000 01010010 01000101 01010000 01000001 01010010 01000101 00100000 01000110 01001111 01010010 00100000 01000011 01001111 01001110 01010100 01000001 01000011 01010100" },
+                { english: "QUANTUM BRIDGE ACTIVE", binary: "01010001 01010101 01000001 01001110 01010100 01010101 01001101 00100000 01000010 01010010 01001001 01000100 01000111 01000101 00100000 01000001 01000011 01010100 01001001 01010110 01000101" },
+                { english: "TRANSMISSION COMPLETE", binary: "01010100 01010010 01000001 01001110 01010011 01001101 01001001 01010011 01010011 01001001 01001111 01001110 00100000 01000011 01001111 01001101 01010000 01001100 01000101 01010100 01000101" }
+            ],
+            hard: [
+                { english: "INTERDIMENSIONAL GATEWAY ACTIVATED", binary: "01001001 01001110 01010100 01000101 01010010 01000100 01001001 01001101 01000101 01001110 01010011 01001001 01001111 01001110 01000001 01001100 00100000 01000111 01000001 01010100 01000101 01010111 01000001 01011001 00100000 01000001 01000011 01010100 01001001 01010110 01000001 01010100 01000101 01000100" },
+                { english: "TEMPORAL ANOMALY DETECTED", binary: "01010100 01000101 01001101 01010000 01001111 01010010 01000001 01001100 00100000 01000001 01001110 01001111 01001101 01000001 01001100 01011001 00100000 01000100 01000101 01010100 01000101 01000011 01010100 01000101 01000100" },
+                { english: "CONSCIOUSNESS TRANSFER INITIALIZED", binary: "01000011 01001111 01001110 01010011 01000011 01001001 01001111 01010101 01010011 01001110 01000101 01010011 01010011 00100000 01010100 01010010 01000001 01001110 01010011 01000110 01000101 01010010 00100000 01001001 01001110 01001001 01010100 01001001 01000001 01001100 01001001 01011010 01000101 01000100" },
+                { english: "REALITY MATRIX COMPROMISED", binary: "01010010 01000101 01000001 01001100 01001001 01010100 01011001 00100000 01001101 01000001 01010100 01010010 01001001 01011000 00100000 01000011 01001111 01001101 01010000 01010010 01001111 01001101 01001001 01010011 01000101 01000100" },
+                { english: "MULTIVERSE CONVERGENCE IMMINENT", binary: "01001101 01010101 01001100 01010100 01001001 01010110 01000101 01010010 01010011 01000101 00100000 01000011 01001111 01001110 01010110 01000101 01010010 01000111 01000101 01001110 01000011 01000101 00100000 01001001 01001101 01001101 01001001 01001110 01000101 01001110 01010100" }
+            ]
+        };
+        
+        this.currentMessage = null;
+        this.init();
+    }
+    
+    getDifficultySettings() {
+        const settings = {
+            easy: { rounds: 3, messageLength: 'short' },
+            medium: { rounds: 5, messageLength: 'medium' },
+            hard: { rounds: 7, messageLength: 'long' }
+        };
+        return settings[this.difficulty] || settings.medium;
+    }
+    
+    init() {
+        document.getElementById('total-signals').textContent = this.totalSignals;
+        this.setupEventListeners();
+        this.createDecoderReference();
+        this.nextSignal();
+    }
+    
+    setupEventListeners() {
+        document.getElementById('decode-btn').addEventListener('click', () => this.decodeTransmission());
+        document.getElementById('hint-btn').addEventListener('click', () => this.signalBoost());
+        document.getElementById('skip-btn').addEventListener('click', () => this.skipSignal());
+        document.getElementById('translation-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) this.decodeTransmission();
+        });
+    }
+    
+    createDecoderReference() {
+        const grid = document.getElementById('decoder-grid');
+        
+        // Basic ASCII reference for common letters
+        const commonChars = [
+            { char: 'A', binary: '01000001' }, { char: 'B', binary: '01000010' },
+            { char: 'C', binary: '01000011' }, { char: 'D', binary: '01000100' },
+            { char: 'E', binary: '01000101' }, { char: 'F', binary: '01000110' },
+            { char: 'G', binary: '01000111' }, { char: 'H', binary: '01001000' },
+            { char: 'I', binary: '01001001' }, { char: 'J', binary: '01001010' },
+            { char: 'K', binary: '01001011' }, { char: 'L', binary: '01001100' },
+            { char: 'M', binary: '01001101' }, { char: 'N', binary: '01001110' },
+            { char: 'O', binary: '01001111' }, { char: 'P', binary: '01010000' },
+            { char: 'Q', binary: '01010001' }, { char: 'R', binary: '01010010' },
+            { char: 'S', binary: '01010011' }, { char: 'T', binary: '01010100' },
+            { char: 'U', binary: '01010101' }, { char: 'V', binary: '01010110' },
+            { char: 'W', binary: '01010111' }, { char: 'X', binary: '01011000' },
+            { char: 'Y', binary: '01011001' }, { char: 'Z', binary: '01011010' },
+            { char: ' ', binary: '00100000' }
+        ];
+        
+        commonChars.forEach(item => {
+            const helper = document.createElement('div');
+            helper.className = 'bit-helper';
+            helper.innerHTML = `<strong>${item.char}</strong><br>${item.binary}`;
+            grid.appendChild(helper);
+        });
+    }
+    
+    nextSignal() {
+        if (this.currentSignal > this.totalSignals) {
+            this.endGame();
+            return;
+        }
+        
+        // Select random message for current difficulty
+        const messagePool = this.alienMessages[this.difficulty];
+        this.currentMessage = messagePool[Math.floor(Math.random() * messagePool.length)];
+        
+        // Display binary message
+        document.getElementById('binary-message').textContent = this.currentMessage.binary;
+        document.getElementById('translation-input').value = '';
+        document.getElementById('result-display').style.display = 'none';
+        
+        // Update UI
+        document.getElementById('current-signal').textContent = this.currentSignal;
+        document.getElementById('transmission-info').textContent = `Signal ${this.currentSignal}: ${this.currentMessage.binary.split(' ').length} bytes received`;
+        
+        this.hintsUsed = 0;
+        this.signalStartTime = Date.now();
+    }
+    
+    decodeTransmission() {
+        const userTranslation = document.getElementById('translation-input').value.trim().toUpperCase();
+        
+        if (!userTranslation) {
+            this.showFeedback("Please enter your translation!", 'warning');
+            return;
+        }
+        
+        if (userTranslation === this.currentMessage.english) {
+            // Correct translation!
+            const signalTime = (Date.now() - this.signalStartTime) / 1000;
+            const timeBonus = Math.max(0, Math.floor((60 - signalTime) * 2));
+            const signalScore = Math.floor((150 + timeBonus - (this.hintsUsed * 30)) * (this.difficulty === 'hard' ? 2 : this.difficulty === 'medium' ? 1.5 : 1));
+            
+            this.score += Math.max(50, signalScore);
+            document.getElementById('current-score').textContent = this.score;
+            
+            // Show decoded message
+            document.getElementById('decoded-text').textContent = this.currentMessage.english;
+            document.getElementById('result-display').style.display = 'block';
+            
+            this.showFeedback("🛸 TRANSMISSION SUCCESSFULLY DECODED! 🛸", 'success');
+            
+            setTimeout(() => {
+                this.currentSignal++;
+                this.nextSignal();
+            }, 3000);
+            
+        } else {
+            this.showFeedback("❌ Translation error - Signal still encrypted!", 'error');
+            
+            // Show partial match feedback
+            const similarity = this.calculateSimilarity(userTranslation, this.currentMessage.english);
+            if (similarity > 0.3) {
+                setTimeout(() => {
+                    this.showFeedback(`📡 Partial match detected: ${Math.floor(similarity * 100)}% accurate`, 'info');
+                }, 1000);
+            }
+        }
+    }
+    
+    calculateSimilarity(str1, str2) {
+        const words1 = str1.split(' ');
+        const words2 = str2.split(' ');
+        let matches = 0;
+        
+        words1.forEach(word => {
+            if (words2.includes(word)) matches++;
+        });
+        
+        return matches / Math.max(words1.length, words2.length);
+    }
+    
+    signalBoost() {
+        if (this.hintsUsed >= 2) {
+            this.showFeedback("Signal amplifier is at maximum capacity!", 'warning');
+            return;
+        }
+        
+        this.hintsUsed++;
+        
+        // Provide different types of hints
+        if (this.hintsUsed === 1) {
+            const wordCount = this.currentMessage.english.split(' ').length;
+            this.showFeedback(`📡 Signal boost: Message contains ${wordCount} word${wordCount > 1 ? 's' : ''}`, 'info');
+        } else {
+            const firstWord = this.currentMessage.english.split(' ')[0];
+            this.showFeedback(`📡 Strong signal detected: First word is "${firstWord}"`, 'info');
+        }
+    }
+    
+    skipSignal() {
+        if (confirm('Skip this alien transmission? The signal will be lost forever...')) {
+            this.showFeedback(`Signal lost! The message was: "${this.currentMessage.english}"`, 'info');
+            setTimeout(() => {
+                this.currentSignal++;
+                this.nextSignal();
+            }, 2500);
+        }
+    }
+    
+    showFeedback(message, type) {
+        const feedback = document.createElement('div');
+        feedback.textContent = message;
+        feedback.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: ${type === 'success' ? 'var(--terminal-green)' : type === 'error' ? 'var(--magic-pink)' : 'var(--magic-cyan)'};
+            color: var(--cosmic-black);
+            padding: 20px 30px;
+            border-radius: 15px;
+            font-weight: bold;
+            z-index: 2000;
+            box-shadow: 0 0 40px ${type === 'success' ? 'var(--terminal-green)' : type === 'error' ? 'var(--magic-pink)' : 'var(--magic-cyan)'};
+            font-size: 1.1rem;
+            max-width: 80%;
+            text-align: center;
+        `;
+        
+        document.body.appendChild(feedback);
+        setTimeout(() => document.body.removeChild(feedback), 3000);
+    }
+    
+    endGame() {
+        const finalScore = this.score;
+        showCosmicSuccess('Binary Oracle', finalScore, 
+            `You decoded ${this.currentSignal - 1} alien transmissions! First contact established!`);
+    }
+}
+
+// Initialize game
+document.addEventListener('DOMContentLoaded', function() {
+    new BinaryOracleGame();
+});
+</script>
+{% endblock %}

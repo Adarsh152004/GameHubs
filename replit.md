@@ -1,12 +1,14 @@
-# Mini Games Collection
+# Cosmic Games Terminal
 
 ## Overview
 
-A Flask-based web application featuring five interactive mini-games with AI integration. The application provides a game collection platform where users can play various brain-teasing games including word guessing, AI detection, memory challenges, drawing tasks, and pattern recognition. Each game tracks scores and completion status, with a unified interface for navigation and gameplay.
+A Flask-based web application featuring ten interactive cosmic-themed mini-games with AI integration and difficulty selection. The application provides a dark space/universe/magic/coding aesthetic with terminal-style UI and command-line visual elements. Users can select difficulty levels (Easy/Medium/Hard) at startup that affect all games throughout their session. Features include mystical spell combinations, alien binary decoding, quantum word decryption, and other unique cosmic challenges.
 
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+Theme preference: Dark space/universe/magic with coding/command line aesthetic.
+Difficulty system: Global difficulty selection affecting all games.
 
 ## System Architecture
 
@@ -18,24 +20,25 @@ Preferred communication style: Simple, everyday language.
 - **Middleware**: ProxyFix for proper header handling in production environments
 
 ### Frontend Architecture
-- **Template Engine**: Jinja2 templating with base template inheritance
-- **Styling**: Bootstrap 5 CSS framework with custom CSS overrides
-- **JavaScript**: Vanilla JavaScript with class-based game logic
-- **Game Structure**: Each game implements a dedicated JavaScript class handling game state, logic, and UI updates
-- **Responsive Design**: Mobile-first approach using Bootstrap grid system
+- **Template Engine**: Jinja2 templating with cosmic-themed base template inheritance
+- **Styling**: Custom CSS cosmic theme with dark space/universe/magic aesthetics, terminal-style UI elements
+- **JavaScript**: Vanilla JavaScript with class-based game logic and difficulty-aware gameplay
+- **Game Structure**: Each game implements a dedicated JavaScript class with difficulty scaling and cosmic visual effects
+- **Responsive Design**: Mobile-first approach with cosmic container design and animated elements
 
 ### Data Storage
-- **Client-side**: localStorage for game history and win counters
-- **Session Storage**: Flask sessions for temporary game state
+- **Client-side**: localStorage for cosmic win counters and difficulty preferences
+- **Session Storage**: Flask sessions for difficulty level and game state management
 - **No Database**: Application runs without persistent server-side storage
 
 ### Game Implementation Pattern
-Each game follows a consistent pattern:
-- Dedicated HTML template extending base layout
-- JavaScript class managing game state and logic
-- Score tracking and completion detection
-- Congratulations modal system for game completion
-- Consistent UI/UX with status indicators and controls
+Each game follows a cosmic-themed pattern:
+- Dedicated HTML template extending cosmic base layout
+- JavaScript class with difficulty-aware game mechanics
+- Cosmic score tracking and quantum victory detection
+- Cosmic success modal system with magical effects
+- Consistent cosmic UI/UX with terminal-style status displays and animated elements
+- Difficulty scaling affecting rounds, time limits, and complexity
 
 ### AI Service Architecture
 - **Primary**: OpenAI Chat Completions API with GPT-4o model

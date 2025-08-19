@@ -1,0 +1,382 @@
+{% extends "base.html" %}
+
+{% block title %}∎ QUANTUM DECRYPT - {{ difficulty.upper() }} MODE ∎{% endblock %}
+
+{% block extra_css %}
+<style>
+.quantum-clue {
+    background: linear-gradient(135deg, var(--space-dark), var(--universe-purple));
+    border: 2px solid var(--terminal-green);
+    border-radius: 12px;
+    padding: 25px;
+    margin: 20px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.quantum-clue::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent 40%, rgba(57, 255, 20, 0.1) 50%, transparent 60%);
+    animation: scan 3s infinite linear;
+    z-index: 0;
+}
+
+@keyframes scan {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+.quantum-clue > * {
+    position: relative;
+    z-index: 1;
+}
+
+.clue-header {
+    color: var(--quantum-glow);
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    text-shadow: 0 0 15px var(--quantum-glow);
+}
+
+.clue-text {
+    color: var(--star-white);
+    font-size: 1.3rem;
+    font-family: 'Courier New', monospace;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.quantum-input-container {
+    position: relative;
+    margin: 30px 0;
+}
+
+.quantum-input-field {
+    background: rgba(0, 0, 0, 0.9);
+    border: 3px solid var(--terminal-green);
+    border-radius: 10px;
+    color: var(--terminal-green);
+    padding: 15px;
+    font-family: 'Courier New', monospace;
+    font-size: 1.4rem;
+    width: 100%;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+    transition: all 0.3s ease;
+}
+
+.quantum-input-field:focus {
+    outline: none;
+    border-color: var(--quantum-glow);
+    box-shadow: 0 0 30px var(--quantum-glow);
+    color: var(--quantum-glow);
+    text-shadow: 0 0 10px var(--quantum-glow);
+}
+
+.cosmic-progress {
+    background: var(--space-dark);
+    border: 2px solid var(--terminal-green);
+    border-radius: 25px;
+    height: 20px;
+    margin: 20px 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-fill {
+    background: linear-gradient(90deg, var(--terminal-green), var(--quantum-glow));
+    height: 100%;
+    width: 0%;
+    transition: width 0.5s ease;
+    box-shadow: 0 0 15px var(--quantum-glow);
+}
+
+.hint-container {
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px dashed var(--magic-cyan);
+    border-radius: 8px;
+    padding: 15px;
+    margin: 20px 0;
+    color: var(--magic-cyan);
+    font-style: italic;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="text-align: center; margin-bottom: 40px;">
+    <h1 class="matrix-text">∎ QUANTUM DECRYPT PROTOCOL ∎</h1>
+    <p style="color: var(--star-white); font-size: 1.1rem;">
+        Decipher cosmic messages transmitted from distant galaxies...
+    </p>
+</div>
+
+<div class="status-display">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+        <div class="level-display">ROUND: <span id="current-round">1</span> / <span id="total-rounds">5</span></div>
+        <div class="score-display">SCORE: <span id="current-score">0</span></div>
+        <div style="color: var(--magic-pink);">DIFFICULTY: {{ difficulty.upper() }}</div>
+    </div>
+</div>
+
+<div class="cosmic-progress">
+    <div class="progress-fill" id="progress-bar"></div>
+</div>
+
+<div id="game-container">
+    <div class="quantum-clue">
+        <h3 class="clue-header">∎ ENCRYPTED MESSAGE RECEIVED ∎</h3>
+        <div class="clue-text" id="clue-display">
+            Initializing quantum decrypt protocols...
+        </div>
+        
+        <div class="quantum-input-container">
+            <input type="text" 
+                   id="answer-input" 
+                   class="quantum-input-field" 
+                   placeholder="ENTER_DECRYPT_KEY..."
+                   autocomplete="off">
+        </div>
+        
+        <button id="submit-btn" class="cosmic-btn" style="margin: 10px;">
+            <i class="fas fa-unlock"></i> DECRYPT_MESSAGE
+        </button>
+        
+        <button id="hint-btn" class="cosmic-btn" style="background: linear-gradient(45deg, var(--magic-cyan), var(--nebula-blue)); margin: 10px;">
+            <i class="fas fa-lightbulb"></i> REQUEST_HINT
+        </button>
+        
+        <div id="hint-display" class="hint-container" style="display: none;">
+            <p id="hint-text"></p>
+        </div>
+    </div>
+</div>
+
+<div style="text-align: center; margin: 30px 0;">
+    <button id="skip-btn" class="cosmic-btn" style="background: linear-gradient(45deg, var(--magic-pink), var(--magic-violet));">
+        <i class="fas fa-forward"></i> EMERGENCY_SKIP
+    </button>
+    
+    <a href="/games" class="cosmic-btn" style="background: linear-gradient(45deg, var(--void-gray), var(--space-dark));">
+        <i class="fas fa-arrow-left"></i> ABORT_MISSION
+    </a>
+</div>
+
+<div style="text-align: center; color: var(--terminal-green); font-family: 'Courier New'; margin-top: 40px; line-height: 1.4;">
+    <p>$ quantum_decrypt_active: true</p>
+    <p>$ neural_interface: scanning...</p>
+    <p>$ cosmic_frequency: locked</p>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+class QuantumDecryptGame {
+    constructor() {
+        this.difficulty = '{{ difficulty }}';
+        this.currentRound = 1;
+        this.score = 0;
+        this.hintsUsed = 0;
+        this.startTime = Date.now();
+        
+        // Get difficulty settings
+        const diffSettings = this.getDifficultySettings();
+        this.totalRounds = diffSettings.rounds;
+        this.timeBonus = diffSettings.timeBonus;
+        this.scoreMultiplier = diffSettings.multiplier;
+        
+        // Cosmic word database
+        this.cosmicWords = {
+            easy: [
+                { word: "STAR", clues: ["A celestial body that shines bright", "What guides travelers at night", "A point of light in space"], hint: "Think celestial navigation" },
+                { word: "MOON", clues: ["Earth's loyal companion", "Controls the tides", "Phases change nightly"], hint: "Our planet's natural satellite" },
+                { word: "COMET", clues: ["Icy visitor with a tail", "Returns on schedule", "Harbinger of change"], hint: "Famous one named Halley" },
+                { word: "GALAXY", clues: ["Billions of stars united", "Milky Way is one", "Spiral arms of light"], hint: "Our cosmic neighborhood" },
+                { word: "PLANET", clues: ["Orbits around a star", "Earth is one", "May have moons"], hint: "Rocky or gas giant" }
+            ],
+            medium: [
+                { word: "NEBULA", clues: ["Stellar nursery of gas and dust", "Where new stars are born", "Colorful cosmic cloud"], hint: "Star formation region" },
+                { word: "QUASAR", clues: ["Extremely bright galactic core", "Powered by black hole", "Distant beacon of energy"], hint: "Quasi-stellar radio source" },
+                { word: "PULSAR", clues: ["Spinning neutron star", "Lighthouse of the cosmos", "Precise cosmic timekeeper"], hint: "Rapidly rotating stellar remnant" },
+                { word: "ASTEROID", clues: ["Rocky space wanderer", "Belt between planets", "Potential Earth visitor"], hint: "Minor planet debris" },
+                { word: "SUPERNOVA", clues: ["Stellar explosion spectacular", "Outshines entire galaxy", "Creates heavy elements"], hint: "Massive star's final act" }
+            ],
+            hard: [
+                { word: "MAGNETOSPHERE", clues: ["Invisible planetary shield", "Deflects cosmic radiation", "Aurora creator"], hint: "Magnetic field region" },
+                { word: "PARALLAX", clues: ["Stellar distance measurement", "Based on Earth's orbit", "Trigonometric method"], hint: "Apparent position shift" },
+                { word: "REDSHIFT", clues: ["Cosmic expansion evidence", "Doppler effect in space", "Light wavelength increase"], hint: "Recession velocity indicator" },
+                { word: "ACCRETION", clues: ["Matter spiraling inward", "Black hole feeding process", "Disk formation mechanism"], hint: "Gravitational matter gathering" },
+                { word: "PERTURBATION", clues: ["Orbital disturbance", "Gravitational influence", "Pathway deviation"], hint: "Celestial mechanics effect" }
+            ]
+        };
+        
+        this.currentWord = null;
+        this.init();
+    }
+    
+    getDifficultySettings() {
+        const settings = {
+            easy: { multiplier: 1, timeBonus: 1.5, rounds: 3 },
+            medium: { multiplier: 1.5, timeBonus: 1, rounds: 5 },
+            hard: { multiplier: 2, timeBonus: 0.7, rounds: 7 }
+        };
+        return settings[this.difficulty] || settings.medium;
+    }
+    
+    init() {
+        document.getElementById('total-rounds').textContent = this.totalRounds;
+        this.setupEventListeners();
+        this.nextRound();
+    }
+    
+    setupEventListeners() {
+        document.getElementById('submit-btn').addEventListener('click', () => this.checkAnswer());
+        document.getElementById('hint-btn').addEventListener('click', () => this.showHint());
+        document.getElementById('skip-btn').addEventListener('click', () => this.skipRound());
+        document.getElementById('answer-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.checkAnswer();
+        });
+    }
+    
+    nextRound() {
+        if (this.currentRound > this.totalRounds) {
+            this.endGame();
+            return;
+        }
+        
+        // Select random word for current difficulty
+        const wordPool = this.cosmicWords[this.difficulty];
+        this.currentWord = wordPool[Math.floor(Math.random() * wordPool.length)];
+        
+        // Select random clue
+        const randomClue = this.currentWord.clues[Math.floor(Math.random() * this.currentWord.clues.length)];
+        
+        // Update UI
+        document.getElementById('current-round').textContent = this.currentRound;
+        document.getElementById('clue-display').textContent = randomClue;
+        document.getElementById('answer-input').value = '';
+        document.getElementById('answer-input').focus();
+        document.getElementById('hint-display').style.display = 'none';
+        
+        // Update progress bar
+        const progress = ((this.currentRound - 1) / this.totalRounds) * 100;
+        document.getElementById('progress-bar').style.width = progress + '%';
+        
+        this.roundStartTime = Date.now();
+    }
+    
+    checkAnswer() {
+        const userAnswer = document.getElementById('answer-input').value.trim().toUpperCase();
+        
+        if (!userAnswer) {
+            this.showFeedback("Please enter your decrypt key!", 'warning');
+            return;
+        }
+        
+        if (userAnswer === this.currentWord.word) {
+            // Correct answer
+            const roundTime = (Date.now() - this.roundStartTime) / 1000;
+            const timeScore = Math.max(0, Math.floor((30 - roundTime) * this.timeBonus));
+            const roundScore = Math.floor((100 + timeScore - (this.hintsUsed * 20)) * this.scoreMultiplier);
+            
+            this.score += Math.max(10, roundScore);
+            document.getElementById('current-score').textContent = this.score;
+            
+            this.showFeedback("✨ QUANTUM MESSAGE DECRYPTED! ✨", 'success');
+            
+            setTimeout(() => {
+                this.currentRound++;
+                this.hintsUsed = 0;
+                this.nextRound();
+            }, 2000);
+            
+        } else {
+            this.showFeedback("❌ DECRYPTION FAILED - Try again!", 'error');
+            document.getElementById('answer-input').style.animation = 'shake 0.5s';
+            setTimeout(() => {
+                document.getElementById('answer-input').style.animation = '';
+            }, 500);
+        }
+    }
+    
+    showHint() {
+        if (this.hintsUsed >= 2) {
+            this.showFeedback("No more hints available for this round!", 'warning');
+            return;
+        }
+        
+        this.hintsUsed++;
+        document.getElementById('hint-text').textContent = `💡 Cosmic Hint: ${this.currentWord.hint}`;
+        document.getElementById('hint-display').style.display = 'block';
+        
+        this.showFeedback(`Hint activated! (-20 points)`, 'info');
+    }
+    
+    skipRound() {
+        if (confirm('Are you sure you want to skip this cosmic challenge?')) {
+            this.showFeedback(`Skipped! The answer was: ${this.currentWord.word}`, 'info');
+            setTimeout(() => {
+                this.currentRound++;
+                this.hintsUsed = 0;
+                this.nextRound();
+            }, 2000);
+        }
+    }
+    
+    showFeedback(message, type) {
+        // Create floating feedback
+        const feedback = document.createElement('div');
+        feedback.textContent = message;
+        feedback.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: ${type === 'success' ? 'var(--terminal-green)' : type === 'error' ? 'var(--magic-pink)' : 'var(--magic-cyan)'};
+            color: var(--cosmic-black);
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: bold;
+            z-index: 2000;
+            box-shadow: 0 0 30px ${type === 'success' ? 'var(--terminal-green)' : type === 'error' ? 'var(--magic-pink)' : 'var(--magic-cyan)'};
+            animation: fadeInOut 2s ease;
+        `;
+        
+        document.body.appendChild(feedback);
+        setTimeout(() => document.body.removeChild(feedback), 2000);
+    }
+    
+    endGame() {
+        const finalScore = this.score;
+        const gameTime = (Date.now() - this.startTime) / 1000;
+        
+        showCosmicSuccess('Quantum Decrypt', finalScore, 
+            `You successfully decrypted ${this.currentRound - 1} cosmic messages! Time: ${gameTime.toFixed(1)}s`);
+    }
+}
+
+// Add shake animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+`;
+document.head.appendChild(style);
+
+// Initialize game when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    new QuantumDecryptGame();
+});
+</script>
+{% endblock %}

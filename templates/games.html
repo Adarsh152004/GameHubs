@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block title %}∎ COSMIC GAMES - {{ difficulty.upper() }} MODE ∎{% endblock %}
+
+{% block content %}
+<div style="text-align: center; margin-bottom: 40px;">
+    <h1 class="matrix-text">COSMIC GAMES ARSENAL</h1>
+    <div class="status-display">
+        <div class="level-display">
+            DIFFICULTY: {{ difficulty.upper() }} MODE ACTIVE
+        </div>
+        <div class="score-display">
+            TOTAL VICTORIES: <span id="wins-count">0</span>
+        </div>
+    </div>
+</div>
+
+<div style="text-align: center; margin-bottom: 30px;">
+    <a href="/" class="cosmic-btn" style="background: linear-gradient(45deg, var(--magic-pink), var(--magic-violet));">
+        <i class="fas fa-cog"></i> CHANGE_DIFFICULTY
+    </a>
+</div>
+
+<div class="games-grid">
+    <!-- Original Games (Upgraded) -->
+    <div class="game-card">
+        <div class="game-icon" style="color: var(--quantum-glow);">
+            <i class="fas fa-unlock-alt"></i>
+        </div>
+        <h3 class="game-title">QUANTUM DECRYPT</h3>
+        <p class="game-description">
+            Decipher cosmic word puzzles using cryptic clues transmitted from distant galaxies. Each clue holds secrets of the universe.
+        </p>
+        <a href="/quantum-decrypt" class="cosmic-btn">
+            <i class="fas fa-play"></i> LAUNCH_MISSION
+        </a>
+    </div>
+
+    <div class="game-card">
+        <div class="game-icon" style="color: var(--magic-cyan);">
+            <i class="fas fa-robot"></i>
+        </div>
+        <h3 class="game-title">NEURAL TURING</h3>
+        <p class="game-description">
+            Test your ability to distinguish between artificial intelligence and human consciousness. Can you spot the digital impostor?
+        </p>
+        <a href="/neural-turing" class="cosmic-btn">
+            <i class="fas fa-play"></i> LAUNCH_MISSION
+        </a>
+    </div>
+
+    <div class="game-card">
+        <div class="game-icon" style="color: var(--magic-pink);">
+            <i class="fas fa-stars"></i>
+        </div>
+        <h3 class="game-title">COSMIC MEMORY</h3>
+        <p class="game-description">
+            Remember stellar constellation patterns as they appear across the cosmic void. Test your memory against the universe itself.
+        </p>
+        <a href="/cosmic-memory" class="cosmic-btn">
+            <i class="fas fa-play"></i> LAUNCH_MISSION
+        </a>
+    </div>
+
+    <div class="game-card">
+        <div class="game-icon" style="color: var(--code-orange);">
+            <i class="fas fa-draw-polygon"></i>
+        </div>
+        <h3 class="game-title">VOID DRAW</h3>
+        <p class="game-description">
+            Navigate zero-gravity drawing challenges where your cursor moves in reverse. Master the art of void-space creation.
+        </p>
+        <a href="/void-draw" class="cosmic-btn">
+            <i class="fas fa-play"></i> LAUNCH_MISSION
+        </a>
+    </div>
+
+    <div class="game-card">
+        <div class="game-icon" style="color: var(--magic-violet);">
+            <i class="fas fa-matrix"></i>
+        </div>
+        <h3 class="game-title">MATRIX CRACK</h3>
+        <p class="game-description">
+            Break through encrypted mathematical patterns hidden in the cosmic matrix. Discover the code that governs reality.
+        </p>
+        <a href="/matrix-crack" class="cosmic-btn">
+            <i class="fas fa-play"></i> LAUNCH_MISSION
+        </a>
+    </div>
+
+    <!-- New Unique Games -->
+    <div class="game-card">
+        <div class="game-icon" style="color: var(--quantum-glow);">
+            <i class="fas fa-magic"></i>
+        </div>
+        <h3 class="game-title">SPELL WEAVE</h3>
+        <p class="game-description">
+            Combine mystical elements in the correct cosmic order. Channel ancient magic through precise spell combinations.
+        </p>
+        <a href="/spell-weave" class="cosmic-btn">
+            <i class="fas fa-play"></i> LAUNCH_MISSION
+        </a>
+    </div>
+
+    <div class="game-card">
+        <div class="game-icon" style="color: var(--nebula-blue);">
+            <i class="fas fa-clock"></i>
+        </div>
+        <h3 class="game-title">TIME PARADOX</h3>
+        <p class="game-description">
+            Solve temporal logic puzzles that bend the fabric of spacetime. Navigate through past, present, and future paradoxes.
+        </p>
+        <a href="/time-paradox" class="cosmic-btn">
+            <i class="fas fa-play"></i> LAUNCH_MISSION
+        </a>
+    </div>
+
+    <div class="game-card">
+        <div class="game-icon" style="color: var(--terminal-green);">
+            <i class="fas fa-alien-8bit"></i>
+        </div>
+        <h3 class="game-title">BINARY ORACLE</h3>
+        <p class="game-description">
+            Decode alien binary messages transmitted from distant civilizations. Translate the language of the cosmos.
+        </p>
+        <a href="/binary-oracle" class="cosmic-btn">
+            <i class="fas fa-play"></i> LAUNCH_MISSION
+        </a>
+    </div>
+
+    <div class="game-card">
+        <div class="game-icon" style="color: var(--magic-cyan);">
+            <i class="fas fa-portal-enter"></i>
+        </div>
+        <h3 class="game-title">QUANTUM MAZE</h3>
+        <p class="game-description">
+            Navigate through shifting dimensional portals in a maze that changes with every quantum step. Reality is not constant.
+        </p>
+        <a href="/quantum-maze" class="cosmic-btn">
+            <i class="fas fa-play"></i> LAUNCH_MISSION
+        </a>
+    </div>
+
+    <div class="game-card">
+        <div class="game-icon" style="color: var(--magic-pink);">
+            <i class="fas fa-question-circle"></i>
+        </div>
+        <h3 class="game-title">COSMIC RIDDLE</h3>
+        <p class="game-description">
+            Answer the universe's most perplexing questions with wit and wisdom. Test your cosmic intelligence against eternity.
+        </p>
+        <a href="/cosmic-riddle" class="cosmic-btn">
+            <i class="fas fa-play"></i> LAUNCH_MISSION
+        </a>
+    </div>
+</div>
+
+<div style="text-align: center; margin-top: 50px;">
+    <div style="color: var(--terminal-green); font-family: 'Courier New'; line-height: 1.4;">
+        <p>$ cosmic_games_loaded: 10</p>
+        <p>$ difficulty_mode: {{ difficulty }}</p>
+        <p>$ neural_interface: active</p>
+        <p class="matrix-text">$ ready_for_adventure: true</p>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Set current difficulty from session
+    currentDifficulty = '{{ difficulty }}';
+    
+    // Add staggered animation to game cards
+    const gameCards = document.querySelectorAll('.game-card');
+    gameCards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(40px)';
+        setTimeout(() => {
+            card.style.transition = 'all 0.8s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 150);
+    });
+    
+    // Update wins counter
+    updateWinCounter();
+});
+</script>
+{% endblock %}
