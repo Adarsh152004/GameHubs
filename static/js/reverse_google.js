@@ -10,27 +10,53 @@ class ReverseGoogleGame {
         this.timeElapsed = 0;
         
         // Predefined clues and answers
+        // this.clues = [
+        //     { clue: "round fruit doctor hates", answer: "apple", alternatives: ["apples"] },
+        //     { clue: "frozen water white stuff", answer: "snow", alternatives: ["ice"] },
+        //     { clue: "yellow curved monkey food", answer: "banana", alternatives: ["bananas"] },
+        //     { clue: "king of jungle mane", answer: "lion", alternatives: ["lions"] },
+        //     { clue: "black and white stripe animal", answer: "zebra", alternatives: ["zebras"] },
+        //     { clue: "mans best friend woof", answer: "dog", alternatives: ["dogs", "puppy"] },
+        //     { clue: "red fire truck color", answer: "red", alternatives: [] },
+        //     { clue: "sky color clear day", answer: "blue", alternatives: [] },
+        //     { clue: "hot yellow star", answer: "sun", alternatives: [] },
+        //     { clue: "night light white circle", answer: "moon", alternatives: [] },
+        //     { clue: "green money paper", answer: "dollar", alternatives: ["money", "cash"] },
+        //     { clue: "sweet brown candy bar", answer: "chocolate", alternatives: ["candy"] },
+        //     { clue: "salty ocean water", answer: "sea", alternatives: ["ocean"] },
+        //     { clue: "tall green leafy plant", answer: "tree", alternatives: ["trees"] },
+        //     { clue: "flying metal machine", answer: "airplane", alternatives: ["plane", "aircraft"] },
+        //     { clue: "four wheels drive machine", answer: "car", alternatives: ["automobile", "vehicle"] },
+        //     { clue: "white cold frozen drink", answer: "milk", alternatives: [] },
+        //     { clue: "brown hot morning drink", answer: "coffee", alternatives: [] },
+        //     { clue: "sweet bee golden liquid", answer: "honey", alternatives: [] },
+        //     { clue: "orange halloween vegetable", answer: "pumpkin", alternatives: ["pumpkins"] }
+        // ];
+
         this.clues = [
+            { clue: "cloud with no rain but data", answer: "cloud", alternatives: ["cloud computing"] },
             { clue: "round fruit doctor hates", answer: "apple", alternatives: ["apples"] },
-            { clue: "frozen water white stuff", answer: "snow", alternatives: ["ice"] },
-            { clue: "yellow curved monkey food", answer: "banana", alternatives: ["bananas"] },
-            { clue: "king of jungle mane", answer: "lion", alternatives: ["lions"] },
-            { clue: "black and white stripe animal", answer: "zebra", alternatives: ["zebras"] },
-            { clue: "mans best friend woof", answer: "dog", alternatives: ["dogs", "puppy"] },
-            { clue: "red fire truck color", answer: "red", alternatives: [] },
-            { clue: "sky color clear day", answer: "blue", alternatives: [] },
-            { clue: "hot yellow star", answer: "sun", alternatives: [] },
+            { clue: "tiny brainy chip inside computer", answer: "processor", alternatives: ["cpu"] },
             { clue: "night light white circle", answer: "moon", alternatives: [] },
-            { clue: "green money paper", answer: "dollar", alternatives: ["money", "cash"] },
-            { clue: "sweet brown candy bar", answer: "chocolate", alternatives: ["candy"] },
-            { clue: "salty ocean water", answer: "sea", alternatives: ["ocean"] },
-            { clue: "tall green leafy plant", answer: "tree", alternatives: ["trees"] },
-            { clue: "flying metal machine", answer: "airplane", alternatives: ["plane", "aircraft"] },
-            { clue: "four wheels drive machine", answer: "car", alternatives: ["automobile", "vehicle"] },
-            { clue: "white cold frozen drink", answer: "milk", alternatives: [] },
-            { clue: "brown hot morning drink", answer: "coffee", alternatives: [] },
-            { clue: "sweet bee golden liquid", answer: "honey", alternatives: [] },
-            { clue: "orange halloween vegetable", answer: "pumpkin", alternatives: ["pumpkins"] }
+            { clue: "penguin linux mascot", answer: "tux", alternatives: ["linux"] },
+
+            { clue: "mans best friend woof", answer: "dog", alternatives: ["dogs", "puppy"] },
+            { clue: "math shape with 3 sides", answer: "triangle", alternatives: [] },
+            { clue: "robot friend vacuum cleaner", answer: "roomba", alternatives: [] },
+            { clue: "hot yellow star", answer: "sun", alternatives: [] },
+            { clue: "engineers best debugging tool", answer: "print", alternatives: ["console.log", "printf"] },
+
+            { clue: "yellow curved monkey food", answer: "banana", alternatives: ["bananas"] },
+            { clue: "famous red hat animal", answer: "fedora", alternatives: ["linux fedora"] },
+            { clue: "404 page not found mascot", answer: "error", alternatives: ["404"] },
+            { clue: "father of modern computers", answer: "turing", alternatives: ["alan turing"] },
+            { clue: "tiny storage atom in ram", answer: "bit", alternatives: [] },
+
+            { clue: "keyboard button for escape", answer: "esc", alternatives: ["escape"] },
+            { clue: "developer fuel morning drink", answer: "coffee", alternatives: ["espresso", "latte"] },
+            { clue: "number of bits in a byte", answer: "8", alternatives: ["eight"] },
+            { clue: "cogwheel of software dev", answer: "algorithm", alternatives: [] },
+            { clue: "language web browsers speak", answer: "javascript", alternatives: ["js"] }
         ];
         
         this.currentClues = [];

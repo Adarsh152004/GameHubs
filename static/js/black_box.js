@@ -11,85 +11,318 @@ class BlackBoxGame {
         this.maxGuesses = 3;
         
         // Mathematical rules
-        this.rules = [
-            {
-                id: 'sum_digits',
-                name: 'Sum of digits',
-                description: 'Add all digits in the number',
-                apply: (n) => Math.abs(n).toString().split('').reduce((sum, digit) => sum + parseInt(digit), 0)
-            },
-            {
-                id: 'product_digits',
-                name: 'Product of digits',
-                description: 'Multiply all digits in the number',
-                apply: (n) => Math.abs(n).toString().split('').reduce((product, digit) => product * parseInt(digit), 1)
-            },
-            {
-                id: 'digit_count',
-                name: 'Number of digits',
-                description: 'Count how many digits the number has',
-                apply: (n) => Math.abs(n).toString().length
-            },
-            {
-                id: 'reverse_number',
-                name: 'Reverse the number',
-                description: 'Reverse the order of digits',
-                apply: (n) => parseInt(Math.abs(n).toString().split('').reverse().join('')) || 0
-            },
-            {
-                id: 'square_sum_digits',
-                name: 'Sum of squared digits',
-                description: 'Add the squares of all digits',
-                apply: (n) => Math.abs(n).toString().split('').reduce((sum, digit) => sum + (parseInt(digit) ** 2), 0)
-            },
-            {
-                id: 'alternating_sum',
-                name: 'Alternating sum of digits',
-                description: 'Add and subtract digits alternately',
-                apply: (n) => {
-                    const digits = Math.abs(n).toString().split('');
-                    let sum = 0;
-                    digits.forEach((digit, index) => {
-                        sum += (index % 2 === 0 ? 1 : -1) * parseInt(digit);
-                    });
-                    return Math.abs(sum);
-                }
-            },
-            {
-                id: 'sum_times_count',
-                name: 'Sum of digits × digit count',
-                description: 'Multiply sum of digits by number of digits',
-                apply: (n) => {
-                    const str = Math.abs(n).toString();
-                    const sum = str.split('').reduce((sum, digit) => sum + parseInt(digit), 0);
-                    return sum * str.length;
-                }
-            },
-            {
-                id: 'largest_digit',
-                name: 'Largest digit',
-                description: 'Find the largest digit in the number',
-                apply: (n) => Math.max(...Math.abs(n).toString().split('').map(d => parseInt(d)))
-            },
-            {
-                id: 'smallest_digit',
-                name: 'Smallest digit',
-                description: 'Find the smallest digit in the number',
-                apply: (n) => Math.min(...Math.abs(n).toString().split('').map(d => parseInt(d)))
-            },
-            {
-                id: 'digital_root',
-                name: 'Digital root',
-                description: 'Keep summing digits until single digit',
-                apply: (n) => {
-                    let num = Math.abs(n);
-                    while (num >= 10) {
-                        num = num.toString().split('').reduce((sum, digit) => sum + parseInt(digit), 0);
+        // this.rules = [
+        //     {
+        //         id: 'sum_digits',
+        //         name: 'Sum of digits',
+        //         description: 'Add all digits in the number',
+        //         apply: (n) => Math.abs(n).toString().split('').reduce((sum, digit) => sum + parseInt(digit), 0)
+        //     },
+        //     {
+        //         id: 'product_digits',
+        //         name: 'Product of digits',
+        //         description: 'Multiply all digits in the number',
+        //         apply: (n) => Math.abs(n).toString().split('').reduce((product, digit) => product * parseInt(digit), 1)
+        //     },
+        //     {
+        //         id: 'digit_count',
+        //         name: 'Number of digits',
+        //         description: 'Count how many digits the number has',
+        //         apply: (n) => Math.abs(n).toString().length
+        //     },
+        //     {
+        //         id: 'reverse_number',
+        //         name: 'Reverse the number',
+        //         description: 'Reverse the order of digits',
+        //         apply: (n) => parseInt(Math.abs(n).toString().split('').reverse().join('')) || 0
+        //     },
+        //     {
+        //         id: 'square_sum_digits',
+        //         name: 'Sum of squared digits',
+        //         description: 'Add the squares of all digits',
+        //         apply: (n) => Math.abs(n).toString().split('').reduce((sum, digit) => sum + (parseInt(digit) ** 2), 0)
+        //     },
+        //     {
+        //         id: 'alternating_sum',
+        //         name: 'Alternating sum of digits',
+        //         description: 'Add and subtract digits alternately',
+        //         apply: (n) => {
+        //             const digits = Math.abs(n).toString().split('');
+        //             let sum = 0;
+        //             digits.forEach((digit, index) => {
+        //                 sum += (index % 2 === 0 ? 1 : -1) * parseInt(digit);
+        //             });
+        //             return Math.abs(sum);
+        //         }
+        //     },
+        //     {
+        //         id: 'sum_times_count',
+        //         name: 'Sum of digits × digit count',
+        //         description: 'Multiply sum of digits by number of digits',
+        //         apply: (n) => {
+        //             const str = Math.abs(n).toString();
+        //             const sum = str.split('').reduce((sum, digit) => sum + parseInt(digit), 0);
+        //             return sum * str.length;
+        //         }
+        //     },
+        //     {
+        //         id: 'largest_digit',
+        //         name: 'Largest digit',
+        //         description: 'Find the largest digit in the number',
+        //         apply: (n) => Math.max(...Math.abs(n).toString().split('').map(d => parseInt(d)))
+        //     },
+        //     {
+        //         id: 'smallest_digit',
+        //         name: 'Smallest digit',
+        //         description: 'Find the smallest digit in the number',
+        //         apply: (n) => Math.min(...Math.abs(n).toString().split('').map(d => parseInt(d)))
+        //     },
+        //     {
+        //         id: 'digital_root',
+        //         name: 'Digital root',
+        //         description: 'Keep summing digits until single digit',
+        //         apply: (n) => {
+        //             let num = Math.abs(n);
+        //             while (num >= 10) {
+        //                 num = num.toString().split('').reduce((sum, digit) => sum + parseInt(digit), 0);
+        //             }
+        //             return num;
+        //         }
+        //     }
+        // ];
+
+       this.rules = [
+                {
+                    id: 'sum_digits',
+                    name: 'Sum of digits',
+                    description: 'Add all digits in the number',
+                    apply: (n) => Math.abs(n).toString().split('').reduce((sum, digit) => sum + parseInt(digit), 0)
+                },
+                {
+                    id: 'product_digits',
+                    name: 'Product of digits',
+                    description: 'Multiply all digits in the number',
+                    apply: (n) => Math.abs(n).toString().split('').reduce((product, digit) => product * parseInt(digit), 1)
+                },
+                {
+                    id: 'digit_count',
+                    name: 'Number of digits',
+                    description: 'Count how many digits the number has',
+                    apply: (n) => Math.abs(n).toString().length
+                },
+                {
+                    id: 'reverse_number',
+                    name: 'Reverse the number',
+                    description: 'Reverse the order of digits',
+                    apply: (n) => parseInt(Math.abs(n).toString().split('').reverse().join('')) || 0
+                },
+                {
+                    id: 'square_sum_digits',
+                    name: 'Sum of squared digits',
+                    description: 'Add the squares of all digits',
+                    apply: (n) => Math.abs(n).toString().split('').reduce((sum, digit) => sum + (parseInt(digit) ** 2), 0)
+                },
+                {
+                    id: 'alternating_sum',
+                    name: 'Alternating sum of digits',
+                    description: 'Add and subtract digits alternately',
+                    apply: (n) => {
+                        const digits = Math.abs(n).toString().split('');
+                        let sum = 0;
+                        digits.forEach((digit, index) => {
+                            sum += (index % 2 === 0 ? 1 : -1) * parseInt(digit);
+                        });
+                        return Math.abs(sum);
                     }
-                    return num;
+                },
+                {
+                    id: 'sum_times_count',
+                    name: 'Sum of digits × digit count',
+                    description: 'Multiply sum of digits by number of digits',
+                    apply: (n) => {
+                        const str = Math.abs(n).toString();
+                        const sum = str.split('').reduce((sum, digit) => sum + parseInt(digit), 0);
+                        return sum * str.length;
+                    }
+                },
+                {
+                    id: 'largest_digit',
+                    name: 'Largest digit',
+                    description: 'Find the largest digit in the number',
+                    apply: (n) => Math.max(...Math.abs(n).toString().split('').map(d => parseInt(d)))
+                },
+                {
+                    id: 'smallest_digit',
+                    name: 'Smallest digit',
+                    description: 'Find the smallest digit in the number',
+                    apply: (n) => Math.min(...Math.abs(n).toString().split('').map(d => parseInt(d)))
+                },
+                {
+                    id: 'digital_root',
+                    name: 'Digital root',
+                    description: 'Keep summing digits until single digit',
+                    apply: (n) => {
+                        let num = Math.abs(n);
+                        while (num >= 10) {
+                            num = num.toString().split('').reduce((sum, digit) => sum + parseInt(digit), 0);
+                        }
+                        return num;
+                    }
+                },
+                
+                // New engineering and logic operations
+                {
+                    id: 'binary_representation',
+                    name: 'Binary representation',
+                    description: 'Convert number to binary and count 1s',
+                    apply: (n) => {
+                        const binary = Math.abs(n).toString(2);
+                        return binary.split('1').length - 1;
+                    }
+                },
+                {
+                    id: 'prime_digit_count',
+                    name: 'Prime digits count',
+                    description: 'Count how many digits are prime numbers (2,3,5,7)',
+                    apply: (n) => {
+                        const primes = ['2','3','5','7'];
+                        return Math.abs(n).toString().split('').filter(d => primes.includes(d)).length;
+                    }
+                },
+                {
+                    id: 'even_odd_ratio',
+                    name: 'Even to odd ratio',
+                    description: 'Calculate ratio of even to odd digits (as percentage)',
+                    apply: (n) => {
+                        const digits = Math.abs(n).toString().split('').map(Number);
+                        const evenCount = digits.filter(d => d % 2 === 0).length;
+                        const oddCount = digits.length - evenCount;
+                        return oddCount === 0 ? 100 : Math.round((evenCount / oddCount) * 100);
+                    }
+                },
+                {
+                    id: 'palindrome_score',
+                    name: 'Palindrome score',
+                    description: 'Check if number is palindrome, score 100 if yes, 0 if no',
+                    apply: (n) => {
+                        const str = Math.abs(n).toString();
+                        return str === str.split('').reverse().join('') ? 100 : 0;
+                    }
+                },
+                {
+                    id: 'digit_gcd',
+                    name: 'GCD of digits',
+                    description: 'Find greatest common divisor of all digits',
+                    apply: (n) => {
+                        const digits = Math.abs(n).toString().split('').map(Number);
+                        const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+                        return digits.reduce((a, b) => gcd(a, b));
+                    }
+                },
+                {
+                    id: 'digit_range',
+                    name: 'Digit range',
+                    description: 'Difference between largest and smallest digit',
+                    apply: (n) => {
+                        const digits = Math.abs(n).toString().split('').map(Number);
+                        return Math.max(...digits) - Math.min(...digits);
+                    }
+                },
+                {
+                    id: 'sum_factorial_digits',
+                    name: 'Sum of digit factorials',
+                    description: 'Sum of factorial of each digit',
+                    apply: (n) => {
+                        const factorial = (x) => x <= 1 ? 1 : x * factorial(x - 1);
+                        return Math.abs(n).toString().split('').reduce((sum, digit) => sum + factorial(parseInt(digit)), 0);
+                    }
+                },
+                {
+                    id: 'engineering_checksum',
+                    name: 'Engineering checksum',
+                    description: 'Weighted sum of digits (position × digit)',
+                    apply: (n) => {
+                        return Math.abs(n).toString().split('').reduce((sum, digit, idx) => sum + (idx + 1) * parseInt(digit), 0);
+                    }
+                },
+                {
+                    id: 'logistic_encoding',
+                    name: 'Logistic encoding',
+                    description: 'Map digits to binary (even=0, odd=1) and convert to decimal',
+                    apply: (n) => {
+                        const binary = Math.abs(n).toString().split('').map(d => parseInt(d) % 2 === 0 ? '0' : '1').join('');
+                        return parseInt(binary, 2);
+                    }
+                },
+                {
+                    id: 'digital_signal_processing',
+                    name: 'Digital signal processing',
+                    description: 'Calculate alternating sum of squared digits',
+                    apply: (n) => {
+                        const digits = Math.abs(n).toString().split('').map(Number);
+                        return digits.reduce((sum, digit, idx) => sum + (idx % 2 === 0 ? 1 : -1) * (digit ** 2), 0);
+                    }
+                },
+                {
+                    id: 'modular_arithmetic',
+                    name: 'Modular arithmetic',
+                    description: 'Sum of digits mod 9 (digital root alternative)',
+                    apply: (n) => {
+                        const sum = Math.abs(n).toString().split('').reduce((sum, digit) => sum + parseInt(digit), 0);
+                        return sum % 9 || 9;
+                    }
+                },
+                {
+                    id: 'fibonacci_digit_sum',
+                    name: 'Fibonacci digit sum',
+                    description: 'Sum of digits at Fibonacci positions (1,2,3,5,8...)',
+                    apply: (n) => {
+                        const digits = Math.abs(n).toString().split('').map(Number);
+                        const fibPositions = [1, 2, 3, 5, 8]; // Fibonacci positions
+                        return fibPositions
+                            .filter(pos => pos <= digits.length)
+                            .reduce((sum, pos) => sum + digits[pos - 1], 0);
+                    }
+                },
+                {
+                    id: 'prime_position_sum',
+                    name: 'Prime position sum',
+                    description: 'Sum of digits at prime number positions (2,3,5,7...)',
+                    apply: (n) => {
+                        const digits = Math.abs(n).toString().split('').map(Number);
+                        const isPrime = (num) => {
+                            if (num <= 1) return false;
+                            for (let i = 2; i <= Math.sqrt(num); i++) {
+                                if (num % i === 0) return false;
+                            }
+                            return true;
+                        };
+                        
+                        return digits
+                            .filter((_, idx) => isPrime(idx + 1))
+                            .reduce((sum, digit) => sum + digit, 0);
+                    }
+                },
+                {
+                    id: 'hamming_weight',
+                    name: 'Hamming weight',
+                    description: 'Number of non-zero digits',
+                    apply: (n) => {
+                        return Math.abs(n).toString().split('').filter(d => d !== '0').length;
+                    }
+                },
+                {
+                    id: 'binary_coded_decimal',
+                    name: 'Binary coded decimal',
+                    description: 'Convert each digit to 4-bit binary and count 1s',
+                    apply: (n) => {
+                        return Math.abs(n).toString().split('').reduce((count, digit) => {
+                            const binary = parseInt(digit).toString(2).padStart(4, '0');
+                            return count + (binary.split('1').length - 1);
+                        }, 0);
+                    }
                 }
-            }
-        ];
+            ];
     }
     
     init() {

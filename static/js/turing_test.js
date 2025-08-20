@@ -13,63 +13,64 @@ class TuringTestGame {
         
         // Prompts with human responses
         this.prompts = [
-            {
-                prompt: "What's your favorite thing about rainy days?",
-                humanResponses: [
-                    "I love the sound of rain on the roof, super relaxing.",
-                    "Perfect excuse to stay inside with a good book and tea."
-                ]
-            },
-            {
-                prompt: "Describe your ideal weekend.",
-                humanResponses: [
-                    "Sleeping in, maybe some hiking if the weather's nice.",
-                    "Hanging with friends, trying a new restaurant downtown."
-                ]
-            },
-            {
-                prompt: "What's something that always makes you laugh?",
-                humanResponses: [
-                    "My dog when he tries to catch his own tail.",
-                    "Those random TikToks at 2am that shouldn't be funny but are."
-                ]
-            },
-            {
-                prompt: "How do you handle stress?",
-                humanResponses: [
-                    "Usually go for a run or call my best friend to vent.",
-                    "Deep breaths and maybe some ice cream, not gonna lie."
-                ]
-            },
-            {
-                prompt: "What's your biggest pet peeve?",
-                humanResponses: [
-                    "People who don't use turn signals, like seriously?",
-                    "When someone leaves just a tiny bit of milk in the carton."
-                ]
-            },
-            {
-                prompt: "Describe the last meal that really impressed you.",
-                humanResponses: [
-                    "This hole-in-the-wall taco place that blew my mind.",
-                    "My mom's lasagna - still haven't figured out her secret."
-                ]
-            },
-            {
-                prompt: "What's your opinion on social media?",
-                humanResponses: [
-                    "It's fine in small doses, but can be pretty toxic.",
-                    "Love staying connected, hate the drama and comparison game."
-                ]
-            },
-            {
-                prompt: "What would you do with a completely free day?",
-                humanResponses: [
-                    "Probably binge-watch something and order way too much takeout.",
-                    "Hit the beach early, then maybe catch up with old friends."
-                ]
-            }
-        ];
+        {
+            "prompt": "What's your favorite thing about working on engineering projects?",
+            "humanResponses": [
+            "Solving complex problems by breaking them into smaller, logical steps.",
+            "Seeing a design move from concept to prototype is incredibly satisfying."
+            ]
+        },
+        {
+            "prompt": "Describe your ideal weekend as an engineer or tech enthusiast.",
+            "humanResponses": [
+            "Building side projects with Raspberry Pi and testing new algorithms.",
+            "Exploring new tech blogs, tinkering with code, and a bit of hiking to clear the mind."
+            ]
+        },
+        {
+            "prompt": "What's something in engineering or tech that always fascinates you?",
+            "humanResponses": [
+            "How small changes in code can scale to impact thousands of users.",
+            "The elegance of logistic systems where timing and precision matter."
+            ]
+        },
+        {
+            "prompt": "How do you handle technical stress or tight deadlines?",
+            "humanResponses": [
+            "Break tasks into modules, automate where possible, and prioritize logically.",
+            "Focus on debugging systematically, then recharge with a walk or quick workout."
+            ]
+        },
+        {
+            "prompt": "What's your biggest pet peeve in tech or logistics?",
+            "humanResponses": [
+            "Poorly documented code—it slows down collaboration so much.",
+            "When supply chain data isn’t updated in real time, it causes major inefficiencies."
+            ]
+        },
+        {
+            "prompt": "Describe the last project or system that impressed you.",
+            "humanResponses": [
+            "A logistics dashboard that used AI to optimize delivery routes in real-time.",
+            "An open-source ML project where the community solved data bottlenecks together."
+            ]
+        },
+        {
+            "prompt": "What's your opinion on automation in engineering and logistics?",
+            "humanResponses": [
+            "It boosts efficiency, but requires strong checks to avoid cascading errors.",
+            "Great for repetitive tasks—frees humans for problem-solving and innovation."
+            ]
+        },
+        {
+            "prompt": "What would you do with a completely free day as an engineer?",
+            "humanResponses": [
+            "Experiment with Arduino sensors and build a smart home prototype.",
+            "Simulate logistic flows with Python to test optimization models."
+            ]
+        }
+]
+
         
         this.difficultyLabels = ['Easy', 'Easy', 'Medium', 'Medium', 'Hard', 'Hard'];
     }
